@@ -3,6 +3,7 @@
 #include <QQmlContext>
 
 #include "maphandler.h"
+#include "KeyboardInputStub.h"
 
 
 int main(int argc, char *argv[])
@@ -19,7 +20,12 @@ int main(int argc, char *argv[])
 
     TransportController* tController = new TransportController();
     NavigationController *navController = new NavigationController();
+
     MapHandler* mapHandler = new MapHandler(navController,tController);
+
+    KeyboardInputStub input(dynamic_cast<IGetNavigationData*>(navController));
+
+    app.installEventFilter(&input);
 
     engine.rootContext()->setContextProperty("MapHandler", mapHandler);
     engine.load(url);

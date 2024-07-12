@@ -20,6 +20,8 @@ public:
     Q_INVOKABLE QPointF getPosition();
     Q_INVOKABLE float getRotation();
 
+    Q_INVOKABLE QPointF getLastIntersection();
+
 };
 
 #endif // MAPHANDLER_H

@@ -22,6 +22,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    KeyboardInputStub.h \
+    Support/Interfaces.h \
     Support/SupportFunctions.h \
     Support/SupportStructers.h \
     maphandler.h \

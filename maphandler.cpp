@@ -16,3 +16,8 @@ float MapHandler::getRotation()
 {
     return _navigationController->GetRotation();
 }
+
+QPointF MapHandler::getLastIntersection()
+{
+    return _navigationController->GetLastIntersection();
+}
