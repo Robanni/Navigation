@@ -27,14 +27,21 @@ private:
     QVector<QPointF> _points;
     QVector<QPointF> _trajectoryPoints;
     QVector<QPointF> _crossPoints;
+    QVector<QPointF> _sectionPoints;
+
+    QPair<QPointF,QPointF> _leftRightBarPos;
     int i = 0;
 private:
     void CalculateIntersection();
+    QPointF CalculateEndPoint(bool left);
+    QPointF CalculateSectionPoint(bool left,double lenght);
 public:
     QPointF GetPosition();
     QPointF GetLastIntersection();
-    float GetRotation();
+    QPair<QPointF,QPointF> GetLastCrossbarPos();
+    QList<QPointF> GetLastSectionPoints();
 
+    float GetRotation();
 
     // IGetNavigationData interface
 public:

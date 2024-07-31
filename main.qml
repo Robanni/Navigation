@@ -1,7 +1,11 @@
 import QtQuick
 import QtLocation
 import QtPositioning
+import QtQuick.Controls
 
+import "OtherQml"
+
+import "ComponentCreator.js" as ComponentCreator
 
 Window
 {
@@ -13,6 +17,10 @@ Window
     property point _currrentPosition: Qt.point(51,39)
     property double _currrentZoom:20
     property double _currrentRotation:0
+    property variant _lastRepeator:[]
+
+    property int _leftCrossPadding: 0
+    property int _rightCrossPadding: 10
 
 
 
@@ -23,7 +31,6 @@ Window
 
         PluginParameter { name: "osm.mapping.providersrepository.address"; value: "http://www.mywebsite.com/osm_repository" }
         PluginParameter { name: "osm.mapping.cache.directory"; value: "C:\Users\Robanni\Documents\QtProject\Tiles" }
-
         //PluginParameter { name: "osm.mapping.highdpi_tiles"; value: true }
     }
 
@@ -46,6 +53,8 @@ Window
             line.color: "black"
 
         }
+
+
         Component {
             id: markerComponent
             MapQuickItem {
@@ -61,19 +70,72 @@ Window
             }
         }
 
+        Component{
+            id:mapRect
+            MapQuickItem {
+                sourceItem: MapRectangle {
+                    color: "red"
+                    border.color: "black"
+                }
+            }
+
+        }
+
         Text
         {
             text: qsTr(_currrentPosition.x + "    " + _currrentPosition.y)
         }
-        Rectangle
+        Transport
         {
             anchors.centerIn: parent
+        }
+        //PolylineRepeater{ id:barPath}
+        Component {
+            id: mapPolilyneComponent
+            MapPolyline
+            {
+                line.width: 5
+                line.color: "red"
+            }
+        }
+        Component.onCompleted: {
+            createCrossbarPassView(0 , 10)
+        }
 
-            color: "red"
-            width: 20
-            height: 20
+        Slider
+        {
+            width: 100
+            height:100
+            anchors.left: parent.left
+            anchors.bottom: parent.bottom
+
+            from: 0
+            to: 5
+
+            onMoved:  {
+                _leftCrossPadding =  value
+                createCrossbarPassView(_leftCrossPadding , _rightCrossPadding)
+            }
+        }
+
+        Slider
+        {
+            width: 100
+            height:100
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+
+            from: 0
+            to: 5
+
+            onMoved:  {
+                _rightCrossPadding = 10 - value
+                createCrossbarPassView(_leftCrossPadding , _rightCrossPadding)
+            }
         }
     }
+
+
 
     Timer
     {
@@ -89,16 +151,43 @@ Window
             mapPath.addCoordinate(QtPositioning.coordinate(_currrentPosition.x,_currrentPosition.y))
 
             var _lastIntersection = MapHandler.getLastIntersection()
-            console.log(_lastIntersection)
+
             addMarker(_lastIntersection.x,_lastIntersection.y)
 
+            var arrayOfCords
+            try {
+                arrayOfCords = MapHandler.getLastSectionPositions()
+            } catch (e) {
+                console.error("Error retrieving positions: " + e)
+                return;
+            }
 
+            if(arrayOfCords !== null && arrayOfCords !== undefined) {
+                for(var i = _leftCrossPadding;i<_rightCrossPadding;i++)
+                {
+                    _lastRepeator[i].addCoordinate(QtPositioning.coordinate(arrayOfCords[i].x,arrayOfCords[i].y))
+                }
+            }
         }
+
     }
+
     function addMarker(latitude,longitude) {
-        var marker = markerComponent.createObject(mapView);
-        marker.coordinate = QtPositioning.coordinate(latitude, longitude);
-        mapView.addMapItem(marker);
+        var marker = markerComponent.createObject(mapView)
+        marker.coordinate = QtPositioning.coordinate(latitude, longitude)
+        mapView.addMapItem(marker)
+    }
+
+    function createCrossbarPassView(left , right)
+    {
+        _lastRepeator = []
+        for(var i = left; i < right; i++)
+        {
+            _lastRepeator[i] = mapPolilyneComponent.createObject(mapView)
+            mapView.addMapItem(_lastRepeator[i])
+        }
     }
 
 }
+
+

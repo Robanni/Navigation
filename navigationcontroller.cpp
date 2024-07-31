@@ -4,8 +4,6 @@
 NavigationController::NavigationController(QObject *parent)
     : QObject{parent}
 {
-
-
 }
 
 QPointF NavigationController::GetPosition()
@@ -15,8 +13,23 @@ QPointF NavigationController::GetPosition()
 
 QPointF NavigationController::GetLastIntersection()
 {
-    //(_crossPoints.isEmpty()) ? qDebug()<<"nan" : qDebug()<<sf::CoordsToGeo( _crossPoints.last().x(),_crossPoints.last().y(),_originLatitude,_originLongitude);
-    return (_crossPoints.isEmpty()) ? QPointF(0, 0) : sf::CoordsToGeo( _crossPoints.last().x(),_crossPoints.last().y(),_originLatitude,_originLongitude);
+    return (_crossPoints.isEmpty()) ?
+               QPointF(0, 0) : sf::CoordsToGeo( _crossPoints.last().x(),_crossPoints.last().y(),_originLatitude,_originLongitude);
+}
+
+QPair<QPointF, QPointF> NavigationController::GetLastCrossbarPos()
+{
+    return _leftRightBarPos;
+}
+
+QVector<QPointF> NavigationController::GetLastSectionPoints()
+{
+    QVector<QPointF> result =  QVector<QPointF>();
+    if(_sectionPoints.count()>=10){
+        result = _sectionPoints.last(10);
+        _sectionPoints.clear();
+    }
+    return result;
 }
 
 float NavigationController::GetRotation()
@@ -71,6 +84,37 @@ void NavigationController::CalculateIntersection()
     }
 }
 
+QPointF NavigationController::CalculateEndPoint(bool left)
+{
+    QPointF A11 = _trajectoryPoints.last();
+    QPointF A12 = _trajectoryPoints[_trajectoryPoints.count()-2];
+
+    A12 = sf::GetUnitVecPointTwo(A11,sf::GetNormalPointTwo(A11,A12,left));
+    A12 = A12- A11;
+
+    A12*=_crossbarLenght/2;
+    A12+=A11;
+
+
+    return A12;
+}
+
+QPointF NavigationController::CalculateSectionPoint(bool left, double lenght)
+{
+    QPointF A11 = _trajectoryPoints.last();
+    QPointF A12 = _trajectoryPoints[_trajectoryPoints.count()-2];
+
+    A12 = sf::GetUnitVecPointTwo(A11,sf::GetNormalPointTwo(A11,A12,left));
+    A12 = A12 - A11;
+
+    A12*=lenght;
+    A12+=A11;
+
+
+    return A12;
+}
+
+
 
 void NavigationController::SetCoordinates(double lat, double lng,double rotation)
 {
@@ -82,4 +126,25 @@ void NavigationController::SetCoordinates(double lat, double lng,double rotation
     _trajectoryPoints.append(sf::GeoToCoords(_points.last().x(),_points.last().y(),_originLatitude,_originLongitude));
 
     CalculateIntersection();
+
+    if(_trajectoryPoints.count()<5)return;
+    if(_trajectoryPoints.last()==_trajectoryPoints[_trajectoryPoints.count()-2]) return;
+
+
+    auto leftBarPos = CalculateEndPoint(true);
+    _leftRightBarPos.first = sf::CoordsToGeo( leftBarPos.x(),leftBarPos.y(),_originLatitude,_originLongitude);
+
+    auto rightBarPos = CalculateEndPoint(false);
+    _leftRightBarPos.second = sf::CoordsToGeo( rightBarPos.x(),rightBarPos.y(),_originLatitude,_originLongitude);
+
+    for (int var = 0; var < 5; ++var) {
+        auto i = CalculateSectionPoint(true, 10 - 2*var);
+        _sectionPoints.append(sf::CoordsToGeo( i.x(),i.y(),_originLatitude,_originLongitude));
+    }
+
+    for (int var = 0; var < 5; ++var) {
+        auto i = CalculateSectionPoint(false, 2+2*var);
+        _sectionPoints.append(sf::CoordsToGeo( i.x(),i.y(),_originLatitude,_originLongitude));
+    }
+
 }

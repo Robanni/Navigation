@@ -21,3 +21,27 @@ QPointF MapHandler::getLastIntersection()
 {
     return _navigationController->GetLastIntersection();
 }
+
+QPointF MapHandler::getLastLeftPos()
+{
+    return _navigationController->GetLastCrossbarPos().first;
+}
+
+QPointF MapHandler::getLastRightPos()
+{
+    return _navigationController->GetLastCrossbarPos().second;
+}
+
+QVariantList MapHandler::getLastSectionPositions()
+{
+    QList<QPointF> pos = _navigationController->GetLastSectionPoints();
+
+    QVariantList variantList;
+
+
+    for (const QPointF &point : pos) {
+        variantList << QVariant::fromValue(point);
+    }
+
+    return variantList;
+}

@@ -25,7 +25,8 @@ private:
     double _lat = 51.6700;
     double _lng = 39.2000;
     double _rotation = 0;
-    double _step = 0.0001;
+    double _step = 0.000005;
+    double _rotationStep = 1;
 
 
     // QObject interface
@@ -47,10 +48,10 @@ public:
                 _lng -= _step * sin(_rotation * M_PI / 180);
                 break;
             case(Qt::Key_Right):
-                _rotation += 1;
+                _rotation += _rotationStep;
                 break;
             case(Qt::Key_Left):
-                _rotation -= 1;
+                _rotation -= _rotationStep;
                 break;
             }
 

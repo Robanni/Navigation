@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>OtherQml/Transport.qml</file>
+        <file>main.qml</file>
+        <file>ComponentCreator.js</file>
+        <file>OtherQml/PolylineRepeater.qml</file>
+    </qresource>
+</RCC>

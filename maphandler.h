@@ -5,6 +5,7 @@
 #include "transportcontroller.h"
 
 #include <QObject>
+#include <QVariant>
 
 
 class MapHandler : public QObject
@@ -21,6 +22,10 @@ public:
     Q_INVOKABLE float getRotation();
 
     Q_INVOKABLE QPointF getLastIntersection();
+
+    Q_INVOKABLE QPointF getLastLeftPos();
+    Q_INVOKABLE QPointF getLastRightPos();
+    Q_INVOKABLE QVariantList getLastSectionPositions();
 
 };
 
