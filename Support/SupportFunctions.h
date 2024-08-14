@@ -15,7 +15,7 @@ namespace sf
 
 const double R = 6378137.0;
 
-std::vector<std::string> split(const std::string& s, char delimiter)
+inline std::vector<std::string> split(const std::string& s, char delimiter)
 {
     std::vector<std::string> tokens;
     std::string token;
@@ -26,7 +26,7 @@ std::vector<std::string> split(const std::string& s, char delimiter)
     return tokens;
 }
 
-double convertToDecimal(const std::string& coordinate, const std::string& direction) {
+inline double convertToDecimal(const std::string& coordinate, const std::string& direction) {
     size_t dotPosition = coordinate.find('.');
 
     double degrees = std::stod(coordinate.substr(0, dotPosition - 2));
@@ -41,7 +41,7 @@ double convertToDecimal(const std::string& coordinate, const std::string& direct
     return decimalCoordinate;
 }
 
-float GetDistanceBetweenPoints(QPoint pointOne,QPoint pointTwo)
+inline float GetDistanceBetweenPoints(QPoint pointOne,QPoint pointTwo)
 {
     float a,b;
     a = pointTwo.x() - pointOne.x();
@@ -49,7 +49,7 @@ float GetDistanceBetweenPoints(QPoint pointOne,QPoint pointTwo)
 
     return std::sqrt(std::pow(a,2) + std::pow(b,2));
 }
-float GetDistanceBetweenPoints(QPointF pointOne,QPointF pointTwo)
+inline float GetDistanceBetweenPoints(QPointF pointOne,QPointF pointTwo)
 {
     float a,b;
     a = pointTwo.x() - pointOne.x();
@@ -58,7 +58,7 @@ float GetDistanceBetweenPoints(QPointF pointOne,QPointF pointTwo)
     return std::sqrt(std::pow(a,2) + std::pow(b,2));
 }
 
-QPointF GetNormalPointTwo(QPointF p1,QPointF p2,bool LeftRight)
+inline QPointF GetNormalPointTwo(QPointF p1,QPointF p2,bool LeftRight)
 {
     int i;
     if(LeftRight) i=1;  else i=-1;
@@ -68,7 +68,7 @@ QPointF GetNormalPointTwo(QPointF p1,QPointF p2,bool LeftRight)
 
     return QPointF(x,y);
 }
-QPointF GetUnitVecPointTwo(QPointF p1, QPointF p2)
+inline QPointF GetUnitVecPointTwo(QPointF p1, QPointF p2)
 {
     float x = p2.x() - p1.x();
     float y = p2.y() - p1.y();
@@ -81,7 +81,7 @@ QPointF GetUnitVecPointTwo(QPointF p1, QPointF p2)
     return QPointF(x+p1.x(),y+p1.y());
 }
 
-bool RangeIntersection(float r1,float r2,float r3,float r4)
+inline bool RangeIntersection(float r1,float r2,float r3,float r4)
 {
     if(r1>r2) std::swap(r1,r2);
     if(r3>r4) std::swap(r3,r4);
@@ -89,7 +89,7 @@ bool RangeIntersection(float r1,float r2,float r3,float r4)
     return std::max(r1,r3)<= std::min(r2,r4);
 }
 
-QPointF SegmentsCrossingPos(QPointF p1,QPointF p2,QPointF p3, QPointF p4)
+inline QPointF SegmentsCrossingPos(QPointF p1,QPointF p2,QPointF p3, QPointF p4)
 {
 
     if(RangeIntersection(p1.x(),p2.x(),p3.x(),p4.x())&&RangeIntersection(p1.y(),p2.y(),p3.y(),p4.y()))
@@ -113,14 +113,14 @@ QPointF SegmentsCrossingPos(QPointF p1,QPointF p2,QPointF p3, QPointF p4)
     return QPointF(0,0);
 }
 
-double DegToRad(double degrees) {
+inline double DegToRad(double degrees) {
     return degrees * M_PI / 180.0;
 }
-double RadToDeg(double radians) {
+inline double RadToDeg(double radians) {
     return radians * 180.0 / M_PI;
 }
 
-QPointF GeoToCoords(double lat, double lon, double lat0rigin, double lon0rigin) {
+inline QPointF GeoToCoords(double lat, double lon, double lat0rigin, double lon0rigin) {
 
     lat = DegToRad(lat);
     lon = DegToRad(lon);
@@ -138,7 +138,7 @@ QPointF GeoToCoords(double lat, double lon, double lat0rigin, double lon0rigin) 
     return QPointF(x, y) ;
 }
 
-QPointF CoordsToGeo(double x, double y, double lat0, double lon0) {
+inline QPointF CoordsToGeo(double x, double y, double lat0, double lon0) {
 
     lat0 = lat0 * M_PI / 180.0;
     lon0 = lon0 * M_PI / 180.0;

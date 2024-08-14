@@ -15,7 +15,7 @@ Window
     title: qsTr("Hello World")
 
     property point _currrentPosition: Qt.point(51,39)
-    property double _currrentZoom:20
+    property double _currrentZoom:18
     property double _currrentRotation:0
     property variant _lastRepeator:[]
 
@@ -85,11 +85,8 @@ Window
         {
             text: qsTr(_currrentPosition.x + "    " + _currrentPosition.y)
         }
-        Transport
-        {
-            anchors.centerIn: parent
-        }
-        //PolylineRepeater{ id:barPath}
+        //Transport{anchors.centerIn: parent}
+
         Component {
             id: mapPolilyneComponent
             MapPolyline
@@ -165,6 +162,7 @@ Window
             if(arrayOfCords !== null && arrayOfCords !== undefined) {
                 for(var i = _leftCrossPadding;i<_rightCrossPadding;i++)
                 {
+                    if(arrayOfCords[i] === undefined) continue
                     _lastRepeator[i].addCoordinate(QtPositioning.coordinate(arrayOfCords[i].x,arrayOfCords[i].y))
                 }
             }

@@ -3,7 +3,8 @@
 #include <QQmlContext>
 
 #include "maphandler.h"
-#include "KeyboardInputStub.h"
+//#include "KeyboardInputStub.h"
+#include "Nmea/FileNmeaInputStub.h"
 
 
 int main(int argc, char *argv[])
@@ -23,9 +24,11 @@ int main(int argc, char *argv[])
 
     MapHandler* mapHandler = new MapHandler(navController,tController);
 
-    KeyboardInputStub input(dynamic_cast<IGetNavigationData*>(navController));
+    //KeyboardInputStub input(dynamic_cast<IGetNavigationData*>(navController));
 
-    app.installEventFilter(&input);
+    //app.installEventFilter(&input);
+
+    FileNmeaInputStub stub(dynamic_cast<IGetNavigationData*>(navController));
 
     engine.rootContext()->setContextProperty("MapHandler", mapHandler);
     engine.load(url);

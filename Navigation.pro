@@ -6,7 +6,7 @@ SOURCES += \
         navigationcontroller.cpp \
         transportcontroller.cpp
 
-resources.files = main.qml
+resources.files = #main.qml
 resources.prefix = /$${TARGET}
 RESOURCES += resources \
     src.qrc
@@ -27,6 +27,8 @@ HEADERS += \
     Support/Interfaces.h \
     Support/SupportFunctions.h \
     Support/SupportStructers.h \
+    Nmea/FileNmeaInputStub.h \
+    Nmea/NmeaReader.h \
     maphandler.h \
     navigationcontroller.h \
     transportcontroller.h
