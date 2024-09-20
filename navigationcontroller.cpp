@@ -6,6 +6,11 @@ NavigationController::NavigationController(QObject *parent)
 {
 }
 
+NavigationController::NavigationController(TransportController *tc, QObject *parent)
+{
+    _transportController = tc;
+}
+
 QPointF NavigationController::GetPosition()
 {
     return _points.last();
@@ -43,44 +48,33 @@ void NavigationController::CalculateIntersection()
 
     QVector2D vecOne;
     QPointF A11 = _trajectoryPoints.last();
-    QPointF A12 = _trajectoryPoints[_trajectoryPoints.count()-2];
 
-    A12 = sf::GetUnitVecPointTwo(A11,sf::GetNormalPointTwo(A11,A12,true));
-    A12 = A12- A11;
+    for (int i = 0; i <= 1; ++i) {
 
-    A12*=_crossbarLenght;
-    A12+=A11;//final second point
+        bool side = (i == 0) ? true : false;
 
-    for (int var = 1; var < _trajectoryPoints.count()-4; ++var)
-    {
+        QPointF A12 = _trajectoryPoints[_trajectoryPoints.count()-2];
 
-        QPointF f =sf::SegmentsCrossingPos(A11,A12,_trajectoryPoints[var-1],_trajectoryPoints[var]);
-        if(f!=QPointF(0,0) )
+        A12 = sf::GetUnitVecPointTwo(A11,sf::GetNormalPointTwo(A11,A12,side));
+        A12 = A12- A11;
+
+        A12*=_crossbarLenght;
+        A12+=A11;//final second point
+
+        for (int var = 1; var < _trajectoryPoints.count()-4; ++var)
         {
-            _crossPoints.append(f);
-            //qDebug()<<"Distance to crossing point:"<<sf::GetDistanceBetweenPoints(A11,f);
-            //qDebug()<<"Result:"<<sf::GetDistanceBetweenPoints(A11,A12/2)/sf::GetDistanceBetweenPoints(A11,f);
+
+            QPointF f =sf::SegmentsCrossingPos(A11,A12,_trajectoryPoints[var-1],_trajectoryPoints[var]);
+            if(f!=QPointF(0,0) )
+            {
+                _crossPoints.append(f);
+                auto dist = sf::GetDistanceBetweenPoints(A11,f);
+                auto percentage = dist/_crossbarLenght;
+                _transportController->SendPercentageOfApproach(side,percentage);
+            }
         }
-    }
 
-    A12 = _trajectoryPoints[_trajectoryPoints.count()-2];
 
-    A12 = sf::GetUnitVecPointTwo(A11,sf::GetNormalPointTwo(A11,A12,false));
-    A12 = A12- A11;
-
-    A12*=_crossbarLenght;
-    A12+=A11;//final second point
-
-    for (int var = 1; var < _trajectoryPoints.count()-4; ++var)
-    {
-
-        QPointF f =sf::SegmentsCrossingPos(A11,A12,_trajectoryPoints[var-1],_trajectoryPoints[var]);
-        if(f!=QPointF(0,0))
-        {
-            _crossPoints.append(f);
-            //qDebug()<<"Distance to crossing point:"<<sf::GetDistanceBetweenPoints(A11,f);
-            //qDebug()<<"Result:"<<sf::GetDistanceBetweenPoints(A11,A12/2)/sf::GetDistanceBetweenPoints(A11,f);
-        }
     }
 }
 
@@ -137,12 +131,12 @@ void NavigationController::SetCoordinates(double lat, double lng,double rotation
     auto rightBarPos = CalculateEndPoint(false);
     _leftRightBarPos.second = sf::CoordsToGeo( rightBarPos.x(),rightBarPos.y(),_originLatitude,_originLongitude);
 
-    for (int var = 0; var < 5; ++var) {
+    for (int var = 0; var < 2; ++var) {
         auto i = CalculateSectionPoint(true, 10 - 2*var);
         _sectionPoints.append(sf::CoordsToGeo( i.x(),i.y(),_originLatitude,_originLongitude));
     }
 
-    for (int var = 0; var < 5; ++var) {
+    for (int var = 0; var < 2; ++var) {
         auto i = CalculateSectionPoint(false, 2+2*var);
         _sectionPoints.append(sf::CoordsToGeo( i.x(),i.y(),_originLatitude,_originLongitude));
     }

@@ -1,15 +1,29 @@
 #ifndef TRANSPORTCONTROLLER_H
 #define TRANSPORTCONTROLLER_H
 
+#include "Transport/section.h"
 #include <QObject>
+#include <QVector>
+#include <QDebug>
 
 class TransportController : public QObject
 {
     Q_OBJECT
 public:
-    explicit TransportController(QObject *parent = nullptr);
+    explicit TransportController(QVector<Section> sections, QObject *parent = nullptr);
 
-signals:
+private:
+    QVector<Section> _sections;
+
+    float _stepOfDisabling = 0.1;
+
+private:
+    void EnableAllSections(bool left);
+    void DisableAllSectionsBefore(bool left,int pos);
+
+public:
+    void SendPercentageOfApproach(bool left, float percent);
+
 
 };
 

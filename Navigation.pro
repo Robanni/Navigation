@@ -1,6 +1,8 @@
 QT += quick location
 
 SOURCES += \
+        SupportTypes/normalizedfloat.cpp \
+        Transport/section.cpp \
         main.cpp \
         maphandler.cpp \
         navigationcontroller.cpp \
@@ -29,6 +31,8 @@ HEADERS += \
     Support/SupportStructers.h \
     Nmea/FileNmeaInputStub.h \
     Nmea/NmeaReader.h \
+    SupportTypes/normalizedfloat.h \
+    Transport/section.h \
     maphandler.h \
     navigationcontroller.h \
     transportcontroller.h

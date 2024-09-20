@@ -2,6 +2,8 @@
 #define NAVIGATIONCONTROLLER_H
 
 #include "Support/Interfaces.h"
+#include "transportcontroller.h"
+
 
 #include <QObject>
 #include <QPointF>
@@ -13,7 +15,10 @@ class NavigationController : public QObject, public IGetNavigationData
     Q_OBJECT
 public:
     explicit NavigationController(QObject *parent = nullptr);
+    explicit NavigationController(TransportController* tc,QObject *parent = nullptr);
 
+private:
+    TransportController* _transportController;
 private:
     double _latitude = 1;
     double _longitude = 1;

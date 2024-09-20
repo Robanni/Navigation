@@ -58,10 +58,10 @@ inline float GetDistanceBetweenPoints(QPointF pointOne,QPointF pointTwo)
     return std::sqrt(std::pow(a,2) + std::pow(b,2));
 }
 
-inline QPointF GetNormalPointTwo(QPointF p1,QPointF p2,bool LeftRight)
+inline QPointF GetNormalPointTwo(QPointF p1,QPointF p2,bool Left)
 {
     int i;
-    if(LeftRight) i=1;  else i=-1;
+    if(Left) i=1;  else i=-1;
 
     float x = p1.x()+(p2.y()-p1.y())*i;
     float y = p1.y()+(p1.x()-p2.x())*i;

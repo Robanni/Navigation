@@ -22,7 +22,7 @@ private:
 
     QVector<QString>::Iterator _nmeaLineIterator;
 
-    int _pathIndex = 2;
+    int _pathIndex = 1;
     int _timerInterval = 100;
 
     NmeaReader _nmeaReader;
@@ -36,7 +36,6 @@ public:
     explicit FileNmeaInputStub(IGetNavigationData* inputer,QObject *parent = nullptr): QObject{parent}
     {
         _dataInputer = inputer;
-        _dataInputer->SetCoordinates(51,39,0);
 
         _pathVector.append("G:/QtProjects/ANEW/Navigation/line.nmea");
         _pathVector.append("G:/QtProjects/ANEW/Navigation/circle.nmea");

@@ -3,7 +3,7 @@
 #include <QQmlContext>
 
 #include "maphandler.h"
-//#include "KeyboardInputStub.h"
+#include "KeyboardInputStub.h"
 #include "Nmea/FileNmeaInputStub.h"
 
 
@@ -19,16 +19,31 @@ int main(int argc, char *argv[])
                 QCoreApplication::exit(-1);
         }, Qt::QueuedConnection);
 
-    TransportController* tController = new TransportController();
-    NavigationController *navController = new NavigationController();
+
+    //Затычка с созданием массива секций. в финале будет приходить из меню
+    QVector<Section> sections;
+    sections.append(Section(QPair<bool,int>(false,0)));
+    sections.append(Section(QPair<bool,int>(false,1)));
+    sections.append(Section(QPair<bool,int>(false,2)));
+    sections.append(Section(QPair<bool,int>(false,1)));
+    sections.append(Section(QPair<bool,int>(true,0)));
+    sections.append(Section(QPair<bool,int>(true,1)));
+    sections.append(Section(QPair<bool,int>(true,2)));
+
+
+    TransportController* tController = new TransportController(sections);
+    NavigationController *navController = new NavigationController(tController);
 
     MapHandler* mapHandler = new MapHandler(navController,tController);
 
-    //KeyboardInputStub input(dynamic_cast<IGetNavigationData*>(navController));
+    //<-Заглушка на клаву
+    KeyboardInputStub input(dynamic_cast<IGetNavigationData*>(navController));
+    app.installEventFilter(&input);
+    //Заглушка на клаву ->
 
-    //app.installEventFilter(&input);
-
-    FileNmeaInputStub stub(dynamic_cast<IGetNavigationData*>(navController));
+    //<-Заглушка на NMEA
+    //FileNmeaInputStub stub(dynamic_cast<IGetNavigationData*>(navController));
+    //Заглушка на NMEA->
 
     engine.rootContext()->setContextProperty("MapHandler", mapHandler);
     engine.load(url);

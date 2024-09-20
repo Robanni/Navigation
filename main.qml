@@ -46,6 +46,16 @@ Window
         zoomLevel: _currrentZoom
         bearing: _currrentRotation
 
+        Transport
+        {
+            id: traktor
+            anchors.centerIn: parent
+            z: 1
+            numSections:10
+            sprayerLength: 30
+            //traktor.toggleSection({first:false,second:0}) - так статус секций меняется на противоположный
+        }
+
         MapPolyline
         {
             id: mapPath
@@ -85,7 +95,7 @@ Window
         {
             text: qsTr(_currrentPosition.x + "    " + _currrentPosition.y)
         }
-        //Transport{anchors.centerIn: parent}
+
 
         Component {
             id: mapPolilyneComponent
@@ -96,7 +106,7 @@ Window
             }
         }
         Component.onCompleted: {
-            createCrossbarPassView(0 , 10)
+            //createCrossbarPassView(0 , 10)
         }
 
         Slider
@@ -163,12 +173,24 @@ Window
                 for(var i = _leftCrossPadding;i<_rightCrossPadding;i++)
                 {
                     if(arrayOfCords[i] === undefined) continue
+                    if(arrayOfCords[i] === QtPositioning.coordinate(0,0)) continue
                     _lastRepeator[i].addCoordinate(QtPositioning.coordinate(arrayOfCords[i].x,arrayOfCords[i].y))
                 }
             }
         }
 
     }
+//    Timer
+//    {
+//        interval: 1000
+//        running: true
+//        repeat: true
+//        onTriggered:
+//        {
+
+//        }
+
+//    }
 
     function addMarker(latitude,longitude) {
         var marker = markerComponent.createObject(mapView)
