@@ -23,7 +23,7 @@ private:
 
 public:
     void SendPercentageOfApproach(bool left, float percent);
-
+    QVector<Section> GetSections();
 
 };
 

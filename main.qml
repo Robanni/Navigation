@@ -22,6 +22,7 @@ Window
     property int _leftCrossPadding: 0
     property int _rightCrossPadding: 10
 
+    property var _sections:[]
 
 
     Plugin
@@ -51,9 +52,9 @@ Window
             id: traktor
             anchors.centerIn: parent
             z: 1
-            numSections:10
-            sprayerLength: 30
-            //traktor.toggleSection({first:false,second:0}) - так статус секций меняется на противоположный
+            numSections:6
+            sprayerLength: 10
+            //traktor.toggleSection({first:false,second:0},status) - так статус секций меняется на противоположный
         }
 
         MapPolyline
@@ -160,7 +161,7 @@ Window
             var _lastIntersection = MapHandler.getLastIntersection()
 
             addMarker(_lastIntersection.x,_lastIntersection.y)
-
+            /*
             var arrayOfCords
             try {
                 arrayOfCords = MapHandler.getLastSectionPositions()
@@ -177,20 +178,35 @@ Window
                     _lastRepeator[i].addCoordinate(QtPositioning.coordinate(arrayOfCords[i].x,arrayOfCords[i].y))
                 }
             }
+            */
         }
 
     }
-//    Timer
-//    {
-//        interval: 1000
-//        running: true
-//        repeat: true
-//        onTriggered:
-//        {
+    Timer
+    {
+        interval: 1000
+        running: true
+        repeat: true
+        onTriggered:
+        {
+            //_sections = MapHandler.getSections()
+            var sec = MapHandler.getSections()
+            console.log( "   -   ")
+            for (var i = 0; i < sec.length; i++) {
 
-//        }
+                let a = sec[i].position
+                let b = (sec[i].value > 0) ? true : false
+                var c = sec[i].value
 
-//    }
+
+                console.log(a.first + "      " + a.second + "      "  + c )
+
+                traktor.toggleSection(a.first,a.second,b)
+            }
+            console.log( "   -   ")
+        }
+
+    }
 
     function addMarker(latitude,longitude) {
         var marker = markerComponent.createObject(mapView)
@@ -207,7 +223,6 @@ Window
             mapView.addMapItem(_lastRepeator[i])
         }
     }
-
 }
 
 

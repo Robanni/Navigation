@@ -45,3 +45,17 @@ QVariantList MapHandler::getLastSectionPositions()
 
     return variantList;
 }
+
+QVariantList MapHandler::getSections()
+{
+    auto sectionsArray = _transportController->GetSections();
+    QVariantList vList;
+
+    for(auto section : sectionsArray)
+    {
+        vList << QVariant::fromValue(section);
+    }
+    //qDebug()<<vList.first().value<Section>().GetSectionPosition();
+   // qDebug()<<vList.first().value<Section>().GetValue();
+    return vList;
+}

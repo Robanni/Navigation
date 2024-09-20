@@ -26,6 +26,7 @@ public:
     Q_INVOKABLE QPointF getLastLeftPos();
     Q_INVOKABLE QPointF getLastRightPos();
     Q_INVOKABLE QVariantList getLastSectionPositions();
+    Q_INVOKABLE QVariantList getSections();
 
 };
 

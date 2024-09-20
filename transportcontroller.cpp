@@ -11,6 +11,10 @@ TransportController::TransportController(QVector<Section> sections, QObject *par
 
 void TransportController::EnableAllSections(bool left)
 {
+    for (auto& section : _sections)
+    {
+        if(left == section.GetSectionPosition().first)section.SetValue(1);
+    }
 }
 
 void TransportController::DisableAllSectionsBefore(bool left,int pos)
@@ -22,8 +26,8 @@ void TransportController::SendPercentageOfApproach(bool left, float percent)
 {
     if(qIsNaN(percent)||percent<0.01f||percent>1) return;
 
-    qDebug() << "position:" << (left ? "left" : "right");
-    qDebug()<<"percent:"<<percent;
+    //    qDebug() << "position:" << (left ? "left" : "right");
+    //    qDebug()<<"percent:"<<percent;
 
     for (auto& section : _sections)
     {
@@ -32,20 +36,18 @@ void TransportController::SendPercentageOfApproach(bool left, float percent)
 
         auto cof = 1 - (_stepOfDisabling + 2 * _stepOfDisabling * position.second);
 
-        if(percent <= cof)
-            section.SetValue(0);
-        else
-            section.SetValue(1);
+        if(percent <= cof) section.SetValue(0);
+        else if(percent >= cof && position.second == 0)EnableAllSections(left);
+        else section.SetValue(1);
 
-        qDebug()<<"Position "<<section.GetSectionPosition();
-        qDebug()<<"status: "<<section.GetValue();
+        //        qDebug()<<"Position "<<section.GetSectionPosition();
+        //        qDebug()<<"status: "<<section.GetValue();
     }
 
-    qDebug()<<"after:";
-    for (auto section : _sections)
-    {
-        qDebug()<<"Position "<<section.GetSectionPosition();
-        qDebug()<<"status: "<<section.GetValue();
-    }
 
+}
+
+QVector<Section> TransportController::GetSections()
+{
+    return _sections;
 }

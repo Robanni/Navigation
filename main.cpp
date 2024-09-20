@@ -19,16 +19,24 @@ int main(int argc, char *argv[])
                 QCoreApplication::exit(-1);
         }, Qt::QueuedConnection);
 
+    //registration of types in qml
+    qRegisterMetaType<Section>("Section");
+    qRegisterMetaType<NormalizedFloat>("NormalizedFloat");
+    qRegisterMetaType<PairWrapper>("PairWrapper");
+    //end of registration
+
 
     //Затычка с созданием массива секций. в финале будет приходить из меню
     QVector<Section> sections;
-    sections.append(Section(QPair<bool,int>(false,0)));
-    sections.append(Section(QPair<bool,int>(false,1)));
-    sections.append(Section(QPair<bool,int>(false,2)));
-    sections.append(Section(QPair<bool,int>(false,1)));
     sections.append(Section(QPair<bool,int>(true,0)));
     sections.append(Section(QPair<bool,int>(true,1)));
     sections.append(Section(QPair<bool,int>(true,2)));
+
+    sections.append(Section(QPair<bool,int>(false,0)));
+    sections.append(Section(QPair<bool,int>(false,1)));
+    sections.append(Section(QPair<bool,int>(false,2)));
+
+
 
 
     TransportController* tController = new TransportController(sections);
