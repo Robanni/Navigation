@@ -1,6 +1,7 @@
 QT += quick location
 
 SOURCES += \
+        Transport/transportdataprovider.cpp \
         main.cpp \
         maphandler.cpp \
         navigationcontroller.cpp \
@@ -32,6 +33,7 @@ HEADERS += \
     SupportTypes/PairWrapper.h \
     SupportTypes/normalizedfloat.h \
     Transport/section.h \
+    Transport/transportdataprovider.h \
     maphandler.h \
     navigationcontroller.h \
     transportcontroller.h

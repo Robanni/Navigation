@@ -55,7 +55,12 @@ QVariantList MapHandler::getSections()
     {
         vList << QVariant::fromValue(section);
     }
-    //qDebug()<<vList.first().value<Section>().GetSectionPosition();
-   // qDebug()<<vList.first().value<Section>().GetValue();
     return vList;
 }
+
+void MapHandler::onTransportDataReceived(TransportData data)
+{
+    emit transportDataReceived(data.CrossbarLenght,data.NumberOfSections);
+}
+
+

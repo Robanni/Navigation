@@ -4,7 +4,7 @@
 class IGetNavigationData
 {
 protected:
-    ~IGetNavigationData() = default;
+    virtual ~IGetNavigationData() = default;
 
 public:
     virtual void SetCoordinates(double lat,double lng,double rotation) = 0;

@@ -1,6 +1,8 @@
 #ifndef SUPPORTSTRUCTERS_H
 #define SUPPORTSTRUCTERS_H
 
+#include <QMetaType>
+
 struct NmeaData
 {
     int time = 0;
@@ -12,5 +14,14 @@ struct NmeaData
     int satellites = 0;
     bool timeEquality = false;
 };
+
+struct TransportData
+{
+    double CrossbarLenght;
+    int NumberOfSections;
+};
+
+Q_DECLARE_METATYPE(TransportData)
+Q_DECLARE_METATYPE(NmeaData)
 
 #endif // SUPPORTSTRUCTERS_H

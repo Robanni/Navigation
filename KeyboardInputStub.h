@@ -56,7 +56,9 @@ public:
             }
 
             _dataInputer->SetCoordinates(_lat,_lng,_rotation);
+            return true;
         }
+        return QObject::eventFilter(object, event);
     }
 };
 

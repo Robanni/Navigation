@@ -86,7 +86,7 @@ QPointF NavigationController::CalculateEndPoint(bool left)
     A12 = sf::GetUnitVecPointTwo(A11,sf::GetNormalPointTwo(A11,A12,left));
     A12 = A12- A11;
 
-    A12*=_crossbarLenght/2;
+    A12*=_crossbarLenght;
     A12+=A11;
 
 
@@ -131,14 +131,20 @@ void NavigationController::SetCoordinates(double lat, double lng,double rotation
     auto rightBarPos = CalculateEndPoint(false);
     _leftRightBarPos.second = sf::CoordsToGeo( rightBarPos.x(),rightBarPos.y(),_originLatitude,_originLongitude);
 
-    for (int var = 0; var < 2; ++var) {
-        auto i = CalculateSectionPoint(true, 10 - 2*var);
+    for (int var = 0; var < _sectionsCount/2; ++var) {
+        auto i = CalculateSectionPoint(true, _crossbarLenght - _crossbarLenght/_sectionsCount*2 * var);
         _sectionPoints.append(sf::CoordsToGeo( i.x(),i.y(),_originLatitude,_originLongitude));
     }
 
-    for (int var = 0; var < 2; ++var) {
-        auto i = CalculateSectionPoint(false, 2+2*var);
+    for (int var = 0; var < _sectionsCount/2; ++var) {
+        auto i = CalculateSectionPoint(false, _crossbarLenght - _crossbarLenght/_sectionsCount*2 * var);
         _sectionPoints.append(sf::CoordsToGeo( i.x(),i.y(),_originLatitude,_originLongitude));
     }
 
+}
+
+void NavigationController::onTransportDataReceived(TransportData data)
+{
+    _crossbarLenght = data.CrossbarLenght;
+    _sectionsCount = data.NumberOfSections;
 }

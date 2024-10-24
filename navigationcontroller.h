@@ -2,6 +2,7 @@
 #define NAVIGATIONCONTROLLER_H
 
 #include "Support/Interfaces.h"
+#include "Support/SupportStructers.h"
 #include "transportcontroller.h"
 
 
@@ -29,6 +30,8 @@ private:
     double _rotation = 0;
 
     double _crossbarLenght = 20;
+    int _sectionsCount = 1;
+
     QVector<QPointF> _points;
     QVector<QPointF> _trajectoryPoints;
     QVector<QPointF> _crossPoints;
@@ -51,6 +54,9 @@ public:
     // IGetNavigationData interface
 public:
     void SetCoordinates(double lat, double lng,double rotation) override;
+
+public slots:
+    void onTransportDataReceived(TransportData);
 };
 
 #endif // NAVIGATIONCONTROLLER_H

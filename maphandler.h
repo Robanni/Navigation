@@ -27,7 +27,10 @@ public:
     Q_INVOKABLE QPointF getLastRightPos();
     Q_INVOKABLE QVariantList getLastSectionPositions();
     Q_INVOKABLE QVariantList getSections();
-
+public slots:
+    void onTransportDataReceived(TransportData data);
+signals:
+    void transportDataReceived(double CrossbarLenght,double NumberOfSections);
 };
 
 #endif // MAPHANDLER_H
